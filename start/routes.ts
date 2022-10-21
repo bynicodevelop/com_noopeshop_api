@@ -25,4 +25,6 @@ Route.group(() => {
   Route.post('/login', 'AuthController.login')
 
   Route.get('/me', 'AuthController.me').middleware('auth')
+
+  Route.get('/products/:id?', 'ProductsController.index')
 }).prefix('api/v1')

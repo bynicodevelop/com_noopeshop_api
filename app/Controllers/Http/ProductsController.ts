@@ -24,7 +24,7 @@ export default class ProductsController {
    *                items:
    *                  $ref: '#/components/schemas/Product'
    *     404:
-   *      description: Invalid credentials
+   *      description: Product not found
    *      content:
    *        application/json:
    *          schema:
@@ -65,6 +65,43 @@ export default class ProductsController {
     return response.status(200).send({ data: products })
   }
 
+  /**
+   * @swagger
+   * /products/:id/categories:
+   *  get:
+   *    parameters:
+   *      - in: path
+   *        description: ID of the product to return
+   *        name: id
+   *    responses:
+   *      200:
+   *        description: Product categories
+   *        content:
+   *          application/json:
+   *            schema:
+   *              type: object
+   *              properties:
+   *                data:
+   *                  type: array
+   *                  items:
+   *                    $ref: '#/components/schemas/Product'
+   *      404:
+   *        description: Product not found
+   *        content:
+   *          application/json:
+   *            schema:
+   *              type: object
+   *              properties:
+   *                errors:
+   *                  type: array
+   *                  items:
+   *                    type: object
+   *                    properties:
+   *                      code:
+   *                        type: string
+   *                      message:
+   *                        type: string
+   */
   public async productCategories({ request, response, logger }) {
     const { id } = request.params()
 

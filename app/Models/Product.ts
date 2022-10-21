@@ -15,6 +15,10 @@ import Category from './category'
  *       type: string
  *      description:
  *       type: string
+ *      categories:
+ *        type: array
+ *        items:
+ *           $ref: '#/components/schemas/Category'
  *      created_at:
  *       type: string
  *      updated_at:

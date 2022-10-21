@@ -27,7 +27,16 @@ Route.group(() => {
   Route.get('/me', 'AuthController.me').middleware('auth')
 
   Route.get('/products/:id?', 'ProductsController.index')
-  Route.post('/products', 'ProductsController.store').middleware('auth')
-  Route.put('/products/:id', 'ProductsController.update').middleware('auth')
-  Route.delete('/products/:id', 'ProductsController.destroy').middleware('auth')
+
+  Route.get('/categories/:id?', 'CategoriesController.index')
+
+  Route.group(() => {
+    Route.post('/products', 'ProductsController.store')
+    Route.put('/products/:id', 'ProductsController.update')
+    Route.delete('/products/:id', 'ProductsController.destroy')
+
+    Route.post('/categories', 'CategoriesController.store')
+    Route.put('/categories/:id', 'CategoriesController.update')
+    Route.delete('/categories/:id', 'CategoriesController.delete')
+  }).middleware('auth')
 }).prefix('api/v1')

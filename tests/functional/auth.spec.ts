@@ -27,6 +27,10 @@ test.group('Auth - Register', () => {
     response.assertStatus(400)
 
     assert.exists(response.body().errors)
+    assert.equal(response.body().errors.length, 2)
+    assert.equal(response.body().errors[0].code, 'required')
+    assert.equal(response.body().errors[0].field, 'email')
+    assert.equal(response.body().errors[0].message, 'required validation failed')
   })
 })
 
@@ -74,5 +78,44 @@ test.group('Auth - Login', () => {
     response.assertStatus(401)
 
     assert.exists(response.body().message)
+  })
+})
+
+test.group('Auth - Me', () => {
+  test('Get user profile with success', async ({ client, assert }) => {
+    const userFactory = await UserFactory.merge({
+      email: 'newjohn@domain.tld',
+      password: 'secret',
+    }).create()
+
+    const user = {
+      email: userFactory.email,
+      password: 'secret',
+    }
+
+    const loginResponse = await client.post('/api/v1/login').form(user)
+
+    const response = await client
+      .get('/api/v1/me')
+      .header('Authorization', `Bearer ${loginResponse.body().credentials.token}`)
+      .send()
+
+    response.assertStatus(200)
+
+    assert.exists(response.body().id)
+    assert.equal(response.body().email, user.email)
+    assert.notExists(response.body().password)
+  })
+
+  test('Get user profile with invalid token', async ({ client, assert }) => {
+    const response = await client
+      .get('/api/v1/me')
+      .header('Authorization', 'Bearer invalidToken')
+      .send()
+
+    response.assertStatus(401)
+
+    assert.exists(response.body().errors)
+    assert.equal(response.body().errors[0].message, 'E_UNAUTHORIZED_ACCESS: Unauthorized access')
   })
 })

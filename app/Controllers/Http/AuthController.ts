@@ -41,7 +41,7 @@ export default class AuthController {
    *                items:
    *                  type: object
    *                  properties:
-   *                    rule:
+   *                    code:
    *                      type: string
    *                    field:
    *                      type: string
@@ -66,7 +66,13 @@ export default class AuthController {
     } catch (error) {
       logger.error(error.messages, 'Error registering user')
 
-      return response.badRequest(error.messages)
+      return response.badRequest({
+        errors: error.messages.errors.map((error: any) => ({
+          code: error.rule,
+          field: error.field,
+          message: error.message,
+        })),
+      })
     }
   }
 
@@ -121,5 +127,40 @@ export default class AuthController {
     } catch (error) {
       return response.unauthorized({ message: 'Invalid credentials' })
     }
+  }
+
+  /**
+   * @swagger
+   * /me:
+   *   get:
+   *    responses:
+   *      200:
+   *        description: User details
+   *        content:
+   *          application/json:
+   *            schema:
+   *              type: object
+   *              properties:
+   *                user:
+   *                  $ref: '#/components/schemas/User'
+   *      401:
+   *        description: Invalid credentials
+   *        content:
+   *          application/json:
+   *            schema:
+   *              type: object
+   *              properties:
+   *                errors:
+   *                  type: array
+   *                  items:
+   *                    type: object
+   *                    properties:
+   *                      message:
+   *                        type: string
+   */
+  public async me({ auth, response }: HttpContextContract) {
+    return response.ok({
+      ...auth.user!.serialize(),
+    })
   }
 }

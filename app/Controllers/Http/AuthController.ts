@@ -133,6 +133,9 @@ export default class AuthController {
    * @swagger
    * /me:
    *   get:
+   *    security:
+   *      type: http
+   *      scheme: bearer
    *    responses:
    *      200:
    *        description: User details

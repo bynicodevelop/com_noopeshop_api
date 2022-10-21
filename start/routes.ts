@@ -27,4 +27,7 @@ Route.group(() => {
   Route.get('/me', 'AuthController.me').middleware('auth')
 
   Route.get('/products/:id?', 'ProductsController.index')
+  Route.post('/products', 'ProductsController.store').middleware('auth')
+  Route.put('/products/:id', 'ProductsController.update').middleware('auth')
+  Route.delete('/products/:id', 'ProductsController.destroy').middleware('auth')
 }).prefix('api/v1')

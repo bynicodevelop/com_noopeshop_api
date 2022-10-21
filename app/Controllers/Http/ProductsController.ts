@@ -7,6 +7,8 @@ export default class ProductsController {
    * @swagger
    * /products/:id?:
    *  get:
+   *   tags:
+   *    - Products
    *   parameters:
    *    - in: path
    *      description: ID of the product to return
@@ -69,6 +71,8 @@ export default class ProductsController {
    * @swagger
    * /products/:id/categories:
    *  get:
+   *    tags:
+   *      - Products
    *    parameters:
    *      - in: path
    *        description: ID of the product to return
@@ -138,6 +142,8 @@ export default class ProductsController {
    * @swagger
    * /products:
    *  post:
+   *    tags:
+   *      - Products
    *    security:
    *      type: http
    *      scheme: bearer
@@ -191,6 +197,8 @@ export default class ProductsController {
    * @swagger
    * /products/:id:
    *  put:
+   *    tags:
+   *      - Products
    *    security:
    *      type: http
    *      scheme: bearer
@@ -279,6 +287,8 @@ export default class ProductsController {
    * @swagger
    * /products/:id:
    *  delete:
+   *    tags:
+   *      - Products
    *    security:
    *      type: http
    *      scheme: bearer

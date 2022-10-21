@@ -7,6 +7,8 @@ export default class CategoriesController {
    * @swagger
    * /categories/:id?:
    *  get:
+   *   tags:
+   *    - Categories
    *   parameters:
    *    - in: path
    *      description: ID of the category to return
@@ -76,6 +78,8 @@ export default class CategoriesController {
    * @swagger
    * /categories:
    *  post:
+   *    tags:
+   *      - Categories
    *    security:
    *      type: http
    *      scheme: bearer
@@ -126,6 +130,8 @@ export default class CategoriesController {
    * @swagger
    * /categories/:id:
    *  put:
+   *    tags:
+   *      - Categories
    *    security:
    *      type: http
    *      scheme: bearer
@@ -207,6 +213,8 @@ export default class CategoriesController {
    * @swagger
    * /categories/:id:
    *  delete:
+   *    tags:
+   *      - Categories
    *    security:
    *      type: http
    *      scheme: bearer

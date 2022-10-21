@@ -8,6 +8,8 @@ export default class AuthController {
    * @swagger
    * /register:
    *  post:
+   *   tags:
+   *    - Auth
    *   requestBody:
    *     content:
    *      application/json:
@@ -80,6 +82,8 @@ export default class AuthController {
    * @swagger
    * /login:
    *  post:
+   *   tags:
+   *    - Auth
    *   requestBody:
    *     content:
    *      application/json:
@@ -133,6 +137,8 @@ export default class AuthController {
    * @swagger
    * /me:
    *   get:
+   *    tags:
+   *      - Auth
    *    security:
    *      type: http
    *      scheme: bearer

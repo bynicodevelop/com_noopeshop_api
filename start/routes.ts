@@ -39,5 +39,10 @@ Route.group(() => {
     Route.post('/categories', 'CategoriesController.store')
     Route.put('/categories/:id', 'CategoriesController.update')
     Route.delete('/categories/:id', 'CategoriesController.delete')
+
+    Route.get('/settings/:key?', 'SettingsController.index')
+    Route.post('/settings', 'SettingsController.store')
+    Route.put('/settings', 'SettingsController.update')
+    Route.delete('/settings/:key', 'SettingsController.delete')
   }).middleware('auth')
 }).prefix('api/v1')

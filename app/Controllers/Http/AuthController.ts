@@ -60,6 +60,7 @@ export default class AuthController {
       const user = await User.create({
         email: payload.email,
         password: payload.password,
+        role_id: payload.role_id,
       })
 
       logger.info('User registered')

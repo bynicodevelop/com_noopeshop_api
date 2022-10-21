@@ -8,6 +8,7 @@
 import type { Config } from '@japa/runner'
 import TestUtils from '@ioc:Adonis/Core/TestUtils'
 import { assert, runFailedTests, specReporter, apiClient } from '@japa/preset-adonis'
+import execa from 'execa'
 
 /*
 |--------------------------------------------------------------------------
@@ -47,7 +48,10 @@ export const reporters: Config['reporters'] = [specReporter()]
 |
 */
 export const runnerHooks: Required<Pick<Config, 'setup' | 'teardown'>> = {
-  setup: [() => TestUtils.ace().loadCommands(), () => TestUtils.db().migrate()],
+  setup: [
+    () => TestUtils.ace().loadCommands(),
+    () => execa.node('ace', ['migration:fresh', '--seed'], {}),
+  ],
   teardown: [],
 }
 

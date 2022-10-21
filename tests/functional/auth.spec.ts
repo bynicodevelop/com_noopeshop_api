@@ -1,11 +1,16 @@
 import { test } from '@japa/runner'
+import Role from 'App/Models/Role'
 import UserFactory from 'Database/factories/UserFactory'
+// import Config from '@ioc:Adonis/Core/Config'
 
 test.group('Auth - Register', () => {
   test('Register user with success', async ({ client, assert }) => {
+    const role = await Role.first()
+
     const user = {
       email: 'john@domain.tld',
       password: 'secret',
+      role_id: role!.id,
     }
 
     const response = await client.post('/api/v1/register').form(user)
@@ -14,6 +19,7 @@ test.group('Auth - Register', () => {
 
     assert.exists(response.body().id)
     assert.equal(response.body().email, user.email)
+    assert.equal(response.body().role_id, user.role_id)
   })
 
   test('Register user with validation error', async ({ client, assert }) => {
@@ -31,6 +37,9 @@ test.group('Auth - Register', () => {
     assert.equal(response.body().errors[0].code, 'required')
     assert.equal(response.body().errors[0].field, 'email')
     assert.equal(response.body().errors[0].message, 'required validation failed')
+    assert.equal(response.body().errors[1].code, 'required')
+    assert.equal(response.body().errors[1].field, 'role_id')
+    assert.equal(response.body().errors[1].message, 'required validation failed')
   })
 })
 

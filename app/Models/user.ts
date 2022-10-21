@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, BaseModel, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import Role from './Role'
 
 /**
  * @swagger
@@ -14,6 +15,8 @@ import { column, beforeSave, BaseModel } from '@ioc:Adonis/Lucid/Orm'
  *      email:
  *       type: string
  *      password:
+ *       type: string
+ *      role_id:
  *       type: string
  *      created_at:
  *       type: string
@@ -32,6 +35,12 @@ export default class User extends BaseModel {
 
   @column()
   public rememberMeToken: string | null
+
+  @column()
+  public role_id: number
+
+  @hasOne(() => Role)
+  public role: HasOne<typeof Role>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

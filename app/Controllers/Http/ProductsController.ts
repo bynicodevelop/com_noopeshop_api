@@ -65,6 +65,38 @@ export default class ProductsController {
     return response.status(200).send({ data: products })
   }
 
+  public async productCategories({ request, response, logger }) {
+    const { id } = request.params()
+
+    logger.info(
+      {
+        id,
+      },
+      'Product ID'
+    )
+
+    if (id) {
+      const product = await Product.find(id)
+
+      logger.info(product, 'Product found')
+
+      if (product) {
+        const categories = await product.related('categories').query()
+
+        return response.status(200).send({ data: [{ ...product.toJSON(), categories }] })
+      }
+
+      return response.status(404).send({
+        errors: [
+          {
+            code: 'not_found',
+            message: 'Product not found',
+          },
+        ],
+      })
+    }
+  }
+
   /**
    * @swagger
    * /products:

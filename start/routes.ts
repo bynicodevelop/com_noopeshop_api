@@ -27,6 +27,7 @@ Route.group(() => {
   Route.get('/me', 'AuthController.me').middleware('auth')
 
   Route.get('/products/:id?', 'ProductsController.index')
+  Route.get('/products/:id/categories', 'ProductsController.productCategories')
 
   Route.get('/categories/:id?', 'CategoriesController.index')
 

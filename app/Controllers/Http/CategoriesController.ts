@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Category from 'App/Models/Category'
+import Category from 'App/Models/category'
 import CreateCategoryValidator from 'App/Validators/CreateCategoryValidator'
 
 export default class CategoriesController {

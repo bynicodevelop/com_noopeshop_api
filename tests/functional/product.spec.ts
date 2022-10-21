@@ -1,4 +1,5 @@
 import { test } from '@japa/runner'
+import CategoryFactory from 'Database/factories/CategoryFactory'
 import ProductFactory from 'Database/factories/ProductFactory'
 import UserFactory from 'Database/factories/UserFactory'
 
@@ -217,6 +218,37 @@ test.group('Product - Delete', (): void => {
     const response = await client
       .delete('api/v1/products/404')
       .header('Authorization', `Bearer ${token}`)
+
+    response.assertStatus(404)
+
+    assert.exists(response.body().errors)
+    assert.equal(response.body().errors[0].code, 'not_found')
+    assert.equal(response.body().errors[0].message, 'Product not found')
+  })
+})
+
+test.group('Product - Categories', (): void => {
+  test("Doit retourner la liste des categories d'un produit avec succes", async ({
+    client,
+    assert,
+  }) => {
+    const product = await ProductFactory.create()
+
+    const category = await CategoryFactory.create()
+
+    await product.related('categories').attach([category.id])
+
+    const response = await client.get(`api/v1/products/${product.id}/categories`)
+
+    response.assertStatus(200)
+
+    assert.exists(response.body().data)
+    assert.equal(response.body().data[0].id, product.id)
+    assert.equal(response.body().data[0].categories[0].id, category.id)
+  })
+
+  test("Doit retourner une erreur 404 si le produit n'existe pas", async ({ client, assert }) => {
+    const response = await client.get('api/v1/products/404/categories')
 
     response.assertStatus(404)
 

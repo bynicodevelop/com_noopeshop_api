@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, BaseModel, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
 import Role from './Role'
+import Config from '@ioc:Adonis/Core/Config'
 
 /**
  * @swagger
@@ -52,6 +53,14 @@ export default class User extends BaseModel {
   public static async hashPassword(user: User) {
     if (user.$dirty.password) {
       user.password = await Hash.make(user.password)
+    }
+
+    if (user.role_id === undefined) {
+      const role = await Role.findBy('name', Config.get('roles.default'))
+
+      if (role) {
+        user.role_id = role.id
+      }
     }
   }
 }

@@ -29,7 +29,6 @@ export default class StoreUserValidator {
       rules.unique({ table: 'users', column: 'email' }),
     ]),
     password: schema.string.optional({ trim: true }),
-    role_id: schema.number([rules.exists({ table: 'roles', column: 'id' })]),
   })
 
   /**

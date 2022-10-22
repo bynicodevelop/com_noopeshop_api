@@ -2,6 +2,7 @@ import { test } from '@japa/runner'
 import Role from 'App/Models/Role'
 import SettingFactory from 'Database/factories/SettingFactory'
 import UserFactory from 'Database/factories/UserFactory'
+import execa from 'execa'
 
 const getRoleAdmin = async () => {
   const role = await Role.findBy('name', 'admin')
@@ -25,7 +26,11 @@ const authenticatedUser = async (client) => {
   return loginResponse.body().credentials.token
 }
 
-test.group('Settings - Index', () => {
+test.group('Settings - Index', (group) => {
+  group.each.setup(async () => {
+    await execa.node('ace', ['migration:fresh', '--seed'], {})
+  })
+
   test('Doit lister tous les paramètres', async ({ client, assert }) => {
     const token = await authenticatedUser(client)
 

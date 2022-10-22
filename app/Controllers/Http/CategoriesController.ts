@@ -181,7 +181,7 @@ export default class CategoriesController {
    *            schema:
    *              $ref: '#/components/schemas/ResponseErrorHelper'
    */
-  public async update({ request, response, logger }: HttpContextContract) {
+  public async update({ request, response }: HttpContextContract) {
     const { id } = request.params()
 
     const category = await Category.find(id)
@@ -243,7 +243,7 @@ export default class CategoriesController {
    *                      message:
    *                        type: string
    */
-  public async delete({ request, response, logger }: HttpContextContract) {
+  public async delete({ request, response }: HttpContextContract) {
     const { id } = request.params()
 
     const category = await Category.find(id)

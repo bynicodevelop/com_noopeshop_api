@@ -1,10 +1,8 @@
 import { test } from '@japa/runner'
-import Customer from 'App/Models/Customer'
 import Role from 'App/Models/Role'
 import User from 'App/Models/user'
 import CustomerFactory from 'Database/factories/CustomerFactory'
 import UserFactory from 'Database/factories/UserFactory'
-import { DateTime } from 'luxon'
 import execa from 'execa'
 
 const getRoleAdmin = async () => {

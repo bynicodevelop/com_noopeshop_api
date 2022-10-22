@@ -10,6 +10,8 @@ export default class extends BaseSchema {
       table.string('password', 180)
       table.string('remember_me_token').nullable()
 
+      table.timestamp('deleted_at').nullable()
+
       table.integer('role_id').unsigned().references('id').inTable('roles')
 
       /**

@@ -31,6 +31,8 @@ Route.group(() => {
 
   Route.get('/categories/:id?', 'CategoriesController.index')
 
+  Route.post('/customers', 'CustomersController.store')
+
   Route.group(() => {
     Route.post('/products', 'ProductsController.store')
     Route.put('/products/:id', 'ProductsController.update')
@@ -44,5 +46,9 @@ Route.group(() => {
     Route.post('/settings', 'SettingsController.store')
     Route.put('/settings', 'SettingsController.update')
     Route.delete('/settings/:key', 'SettingsController.delete')
+
+    Route.get('/customers/:id?', 'CustomersController.index')
+    Route.put('/customers/:id', 'CustomersController.update')
+    Route.delete('/customers/:id', 'CustomersController.delete')
   }).middleware('auth')
 }).prefix('api/v1')

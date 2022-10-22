@@ -1,6 +1,15 @@
 import { test } from '@japa/runner'
 import UserFactory from 'Database/factories/UserFactory'
 import Config from '@ioc:Adonis/Core/Config'
+import Role from 'App/Models/Role'
+
+const getRoleAdmin = async () => {
+  Config.set('roles.default', 'admin')
+
+  const role = await Role.findByOrFail('name', 'admin')
+
+  return role
+}
 
 test.group('Auth - Register', () => {
   test('Register user with success', async ({ client, assert }) => {
@@ -55,9 +64,12 @@ test.group('Auth - Register', () => {
 
 test.group('Auth - Login', () => {
   test('Login user with success', async ({ client, assert }) => {
+    const role = await getRoleAdmin()
+
     const userFactory = await UserFactory.merge({
       email: 'johnny@domain.tld',
       password: 'secret',
+      role_id: role.id,
     }).create()
 
     const user = {
@@ -102,9 +114,12 @@ test.group('Auth - Login', () => {
 
 test.group('Auth - Me', () => {
   test('Get user profile with success', async ({ client, assert }) => {
+    const role = await getRoleAdmin()
+
     const userFactory = await UserFactory.merge({
       email: 'newjohn@domain.tld',
       password: 'secret',
+      role_id: role.id,
     }).create()
 
     const user = {

@@ -5,5 +5,6 @@ export default Factory.define(User, ({ faker }) => {
   return {
     email: faker.internet.email(),
     password: faker.internet.password(),
+    role_id: faker.random.numeric(1),
   }
 }).build()

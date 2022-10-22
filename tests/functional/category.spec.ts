@@ -1,10 +1,20 @@
 import { test } from '@japa/runner'
 import CategoryFactory from 'Database/factories/CategoryFactory'
 import UserFactory from 'Database/factories/UserFactory'
+import Role from 'App/Models/Role'
+
+const getRoleAdmin = async () => {
+  const role = await Role.findBy('name', 'admin')
+
+  return role
+}
 
 const authenticatedUser = async (client) => {
+  const role = await getRoleAdmin()
+
   const user = await UserFactory.merge({
     password: 'secret',
+    role_id: role?.id,
   }).create()
 
   const loginResponse = await client.post('api/v1/login').form({

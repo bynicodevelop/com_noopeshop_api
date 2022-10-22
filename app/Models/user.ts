@@ -3,6 +3,7 @@ import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, BaseModel, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
 import Role from './Role'
 import Config from '@ioc:Adonis/Core/Config'
+import Customer from './Customer'
 
 /**
  * @swagger
@@ -38,10 +39,16 @@ export default class User extends BaseModel {
   public rememberMeToken: string | null
 
   @column()
-  public role_id: number
+  public roleId: number
 
   @hasOne(() => Role)
   public role: HasOne<typeof Role>
+
+  @hasOne(() => Customer)
+  public customer: HasOne<typeof Customer>
+
+  @column.dateTime({ autoCreate: true })
+  public deletedAt: DateTime
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -55,11 +62,11 @@ export default class User extends BaseModel {
       user.password = await Hash.make(user.password)
     }
 
-    if (user.role_id === undefined) {
+    if (user.roleId === undefined) {
       const role = await Role.findBy('name', Config.get('roles.default'))
 
       if (role) {
-        user.role_id = role.id
+        user.roleId = role.id
       }
     }
   }

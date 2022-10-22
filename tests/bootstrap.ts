@@ -52,7 +52,7 @@ export const runnerHooks: Required<Pick<Config, 'setup' | 'teardown'>> = {
     () => TestUtils.ace().loadCommands(),
     () => execa.node('ace', ['migration:fresh', '--seed'], {}),
   ],
-  teardown: [],
+  teardown: [() => execa.node('ace', ['migration:reset'], {})],
 }
 
 /*

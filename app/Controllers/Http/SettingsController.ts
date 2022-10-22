@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import ResponseErrorHelper from 'App/Helpers/ResponseErrorHelper'
 import Setting from 'App/Models/Setting'
 import CreateSettingValidator from 'App/Validators/CreateSettingValidator'
 import UpdateSettingValidator from 'App/Validators/UpdateSettingValidator'
@@ -23,6 +24,12 @@ export default class SettingsController {
    *                  type: array
    *                  items:
    *                    $ref: '#/components/schemas/Setting'
+   *      404:
+   *        description: Setting not found
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/ResponseErrorHelper'
    */
   public async index({ request, response }: HttpContextContract) {
     const { key } = request.params()
@@ -34,7 +41,18 @@ export default class SettingsController {
         return response.json(setting)
       }
 
-      return response.notFound({ message: 'Setting not found' })
+      return response.status(404).send(
+        ResponseErrorHelper.error({
+          messages: {
+            errors: [
+              {
+                code: 'not_found',
+                message: 'Setting not found',
+              },
+            ],
+          },
+        })
+      )
     }
 
     const settings = await Setting.all()
@@ -76,21 +94,11 @@ export default class SettingsController {
    *                data:
    *                  $ref: '#/components/schemas/Setting'
    *      400:
-   *        description: Validation error
+   *        description: Bad request
    *        content:
    *          application/json:
    *            schema:
-   *              type: object
-   *              properties:
-   *                errors:
-   *                  type: array
-   *                  items:
-   *                    type: object
-   *                    properties:
-   *                      code:
-   *                        type: string
-   *                      message:
-   *                        type: string
+   *              $ref: '#/components/schemas/ResponseErrorHelper'
    */
   public async store({ request, response, logger }: HttpContextContract) {
     try {
@@ -104,13 +112,7 @@ export default class SettingsController {
     } catch (error) {
       logger.error(error, 'Error creating setting')
 
-      return response.status(400).send({
-        errors: error.messages.errors.map((error: any) => ({
-          code: error.rule,
-          field: error.field,
-          message: error.message,
-        })),
-      })
+      return response.status(400).send(ResponseErrorHelper.error(error))
     }
   }
 
@@ -147,22 +149,18 @@ export default class SettingsController {
    *              properties:
    *                data:
    *                  $ref: '#/components/schemas/Setting'
-   *      400:
-   *        description: Validation error
+   *      404:
+   *        description: Setting not found
    *        content:
    *          application/json:
    *            schema:
-   *              type: object
-   *              properties:
-   *                errors:
-   *                  type: array
-   *                  items:
-   *                    type: object
-   *                    properties:
-   *                      code:
-   *                        type: string
-   *                      message:
-   *                        type: string
+   *              $ref: '#/components/schemas/ResponseErrorHelper'
+   *      400:
+   *        description: Bad request
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/ResponseErrorHelper'
    */
   public async update({ request, response, logger }: HttpContextContract) {
     try {
@@ -180,25 +178,33 @@ export default class SettingsController {
         return response.json(setting)
       }
 
-      return response.status(404).send({
-        errors: [
-          {
-            code: 'not_found',
-            message: 'Product not found',
+      return response.status(404).send(
+        ResponseErrorHelper.error({
+          messages: {
+            errors: [
+              {
+                code: 'not_found',
+                message: 'Product not found',
+              },
+            ],
           },
-        ],
-      })
+        })
+      )
     } catch (error) {
       logger.error(error, 'Error updating setting')
 
-      return response.status(400).send({
-        errors: [
-          {
-            code: 'not_found',
-            message: 'Product not found',
+      return response.status(400).send(
+        ResponseErrorHelper.error({
+          messages: {
+            errors: [
+              {
+                code: 'invalid_data',
+                message: 'Invalid data',
+              },
+            ],
           },
-        ],
-      })
+        })
+      )
     }
   }
 

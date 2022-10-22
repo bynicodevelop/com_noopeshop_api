@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import ResponseErrorHelper from 'App/Helpers/ResponseErrorHelper'
 import User from 'App/Models/user'
 import LoginValidator from 'App/Validators/Auth/LoginValidator'
 import StoreUserValidator from 'App/Validators/Auth/StoreUserValidator'
@@ -32,23 +33,11 @@ export default class AuthController {
    *              user:
    *                $ref: '#/components/schemas/User'
    *     400:
-   *      description: Invalid credentials
-   *      content:
-   *        application/json:
-   *          schema:
-   *            type: object
-   *            properties:
-   *              errors:
-   *                type: array
-   *                items:
-   *                  type: object
-   *                  properties:
-   *                    code:
-   *                      type: string
-   *                    field:
-   *                      type: string
-   *                    message:
-   *                      type: string
+   *       description: Bad request
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/ResponseErrorHelper'
    *
    */
   public async register({ request, response, logger }: HttpContextContract) {
@@ -60,7 +49,7 @@ export default class AuthController {
       const user = await User.create({
         email: payload.email,
         password: payload.password,
-        role_id: payload.role_id,
+        // roleId: payload.role_id,
       })
 
       logger.info('User registered')
@@ -69,13 +58,7 @@ export default class AuthController {
     } catch (error) {
       logger.error(error.messages, 'Error registering user')
 
-      return response.badRequest({
-        errors: error.messages.errors.map((error: any) => ({
-          code: error.rule,
-          field: error.field,
-          message: error.message,
-        })),
-      })
+      return response.status(400).send(ResponseErrorHelper.error(error))
     }
   }
 

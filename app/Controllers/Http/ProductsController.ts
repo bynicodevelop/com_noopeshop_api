@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import ResponseErrorHelper from 'App/Helpers/ResponseErrorHelper'
 import Product from 'App/Models/Product'
 import CreateProductValidator from 'App/Validators/CreateProductValidator'
 
@@ -165,6 +166,12 @@ export default class ProductsController {
    *                  type: array
    *                  items:
    *                    $ref: '#/components/schemas/Product'
+   *      400:
+   *        description: Bad request
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/ResponseErrorHelper'
    */
   public async store({ request, response, logger }: HttpContextContract) {
     try {
@@ -183,13 +190,7 @@ export default class ProductsController {
     } catch (error) {
       logger.error(error, 'Error creating product')
 
-      return response.status(400).send({
-        errors: error.messages.errors.map((error: any) => ({
-          code: error.rule,
-          field: error.field,
-          message: error.message,
-        })),
-      })
+      return response.status(400).send(ResponseErrorHelper.error(error))
     }
   }
 
@@ -240,6 +241,12 @@ export default class ProductsController {
    *                        type: string
    *                      message:
    *                        type: string
+   *      400:
+   *        description: Bad request
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/ResponseErrorHelper'
    */
   public async update({ request, response, logger }) {
     const { id } = request.params()
@@ -273,13 +280,7 @@ export default class ProductsController {
     } catch (error) {
       logger.error(error, 'Error updating product')
 
-      return response.status(400).send({
-        errors: error.messages.errors.map((error: any) => ({
-          code: error.rule,
-          field: error.field,
-          message: error.message,
-        })),
-      })
+      return response.status(400).send(ResponseErrorHelper.error(error))
     }
   }
 

@@ -5,9 +5,29 @@ import Role from 'App/Models/Role'
 import User from 'App/Models/user'
 import CreateCustomerValidator from 'App/Validators/CreateCustomerValidator'
 import { DateTime } from 'luxon'
+import ResponseErrorHelper from 'App/Helpers/ResponseErrorHelper'
 
 export default class CustomersController {
-  public async index({ request, response, logger }: HttpContextContract) {
+  /**
+   * @swagger
+   *  /customers:
+   *    get:
+   *      tags:
+   *        - Customers
+   *      responses:
+   *        200:
+   *          description: Login successful
+   *          content:
+   *           application/json:
+   *            schema:
+   *              type: object
+   *              properties:
+   *                data:
+   *                  type: array
+   *                  items:
+   *                    $ref: '#/components/schemas/Customer'
+   */
+  public async index({ request, response }: HttpContextContract) {
     const { id } = request.params()
 
     if (id) {
@@ -49,6 +69,37 @@ export default class CustomersController {
     })
   }
 
+  /**
+   * @swagger
+   *  /customers:
+   *    post:
+   *      tags:
+   *        - Customers
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/CreateCustomerValidator'
+   *      responses:
+   *        201:
+   *          description: Customer created
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  data:
+   *                    type: array
+   *                    items:
+   *                      $ref: '#/components/schemas/Customer'
+   *        400:
+   *          description: Bad request
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/ResponseErrorHelper'
+   */
   public async store({ request, response, logger }: HttpContextContract) {
     try {
       const payload = await request.validate(CreateCustomerValidator)
@@ -73,16 +124,45 @@ export default class CustomersController {
     } catch (error) {
       logger.error(error, 'Error creating customer')
 
-      return response.status(400).send({
-        errors: error.messages.errors.map((error: any) => ({
-          code: error.rule,
-          field: error.field,
-          message: error.message,
-        })),
-      })
+      return response.status(400).send(ResponseErrorHelper.error(error))
     }
   }
 
+  /**
+   * @swagger
+   *  /customers/{id}:
+   *    put:
+   *      tags:
+   *        - Customers
+   *      parameters:
+   *        - in: path
+   *          name: id
+   *          required: true
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/CreateCustomerValidator'
+   *      responses:
+   *        200:
+   *          description: Customer updated
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  data:
+   *                    type: array
+   *                    items:
+   *                      $ref: '#/components/schemas/Customer'
+   *        404:
+   *          description: Customer not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/ResponseErrorHelper'
+   */
   public async update({ request, response, logger }: HttpContextContract) {
     const { id } = request.params()
 
@@ -126,16 +206,40 @@ export default class CustomersController {
     } catch (error) {
       logger.error(error, 'Error updating customer')
 
-      return response.status(400).send({
-        errors: error.messages.errors.map((error: any) => ({
-          code: error.rule,
-          field: error.field,
-          message: error.message,
-        })),
-      })
+      return response.status(400).send(ResponseErrorHelper.error(error))
     }
   }
 
+  /**
+   * @swagger
+   *  /customers/{id}:
+   *    delete:
+   *      tags:
+   *        - Customers
+   *      parameters:
+   *        - in: path
+   *          name: id
+   *          required: true
+   *      responses:
+   *        204:
+   *          description: Customer deleted
+   *        404:
+   *          description: Customer not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  errors:
+   *                    type: array
+   *                    items:
+   *                      type: object
+   *                      properties:
+   *                        code:
+   *                          type: string
+   *                        message:
+   *                          type: string
+   */
   public async delete({ request, response, logger }: HttpContextContract) {
     const { id } = request.params()
 

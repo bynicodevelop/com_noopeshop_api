@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import ResponseErrorHelper from 'App/Helpers/ResponseErrorHelper'
 import Category from 'App/Models/category'
 import CreateCategoryValidator from 'App/Validators/CreateCategoryValidator'
 
@@ -101,6 +102,12 @@ export default class CategoriesController {
    *                  type: array
    *                  items:
    *                    $ref: '#/components/schemas/Category'
+   *      400:
+   *        description: Bad request
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/ResponseErrorHelper'
    */
   public async store({ request, response, logger }: HttpContextContract) {
     try {
@@ -116,13 +123,7 @@ export default class CategoriesController {
     } catch (error) {
       logger.error(error, 'Error creating category')
 
-      return response.status(400).send({
-        errors: error.messages.errors.map((error: any) => ({
-          code: error.rule,
-          field: error.field,
-          message: error.message,
-        })),
-      })
+      return response.status(400).send(ResponseErrorHelper.error(error))
     }
   }
 
@@ -173,6 +174,12 @@ export default class CategoriesController {
    *                        type: string
    *                      message:
    *                        type: string
+   *      400:
+   *        description: Bad request
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/ResponseErrorHelper'
    */
   public async update({ request, response, logger }: HttpContextContract) {
     const { id } = request.params()
@@ -199,13 +206,7 @@ export default class CategoriesController {
 
       return response.status(200).send({ data: [category] })
     } catch (error) {
-      return response.status(400).send({
-        errors: error.messages.errors.map((error: any) => ({
-          code: error.rule,
-          field: error.field,
-          message: error.message,
-        })),
-      })
+      return response.status(400).send(ResponseErrorHelper.error(error))
     }
   }
 
@@ -260,6 +261,6 @@ export default class CategoriesController {
 
     await category.delete()
 
-    return response.status(204).send()
+    return response.status(204)
   }
 }

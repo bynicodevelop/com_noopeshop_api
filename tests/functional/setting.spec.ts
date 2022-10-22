@@ -14,7 +14,7 @@ const authenticatedUser = async (client) => {
 
   const user = await UserFactory.merge({
     password: 'secret',
-    role_id: role?.id,
+    roleId: role?.id,
   }).create()
 
   const loginResponse = await client.post('api/v1/login').form({
@@ -51,6 +51,19 @@ test.group('Settings - Index', () => {
     response.assertStatus(200)
 
     assert.equal(response.body().key, setting.key)
+  })
+
+  test("Doit retourner une erreur 404 si le paramètre n'existe pas", async ({ client, assert }) => {
+    const token = await authenticatedUser(client)
+
+    const response = await client
+      .get('api/v1/settings/unknown')
+      .header('Authorization', `Bearer ${token}`)
+
+    response.assertStatus(404)
+
+    assert.equal(response.body().errors[0].message, 'Setting not found')
+    assert.equal(response.body().errors[0].code, 'not_found')
   })
 })
 

@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasMany, hasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
 import User from './user'
+import Address from './Address'
 
 /**
  * @swagger
@@ -43,6 +44,9 @@ export default class Customer extends BaseModel {
 
   @hasOne(() => User)
   public user: HasOne<typeof User>
+
+  @hasMany(() => Address)
+  public addresses: HasMany<typeof Address>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

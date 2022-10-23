@@ -50,5 +50,10 @@ Route.group(() => {
     Route.get('/customers/:id?', 'CustomersController.index')
     Route.put('/customers/:id', 'CustomersController.update')
     Route.delete('/customers/:id', 'CustomersController.delete')
+
+    Route.get('/customers/:customerId/addresses/:addressId?', 'AddressesController.index')
+    Route.post('/customers/:customerId/addresses', 'AddressesController.store')
+    Route.put('/customers/:customerId/addresses/:addressId', 'AddressesController.update')
+    Route.delete('/customers/:customerId/addresses/:addressId', 'AddressesController.delete')
   }).middleware('auth')
 }).prefix('api/v1')

@@ -1,7 +1,7 @@
 import { test } from '@japa/runner'
 import CategoryFactory from 'Database/factories/CategoryFactory'
 import UserFactory from 'Database/factories/UserFactory'
-import Role from 'App/Models/Role'
+import Role from 'App/Models/role'
 
 const getRoleAdmin = async () => {
   const role = await Role.findBy('name', 'admin')

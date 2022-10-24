@@ -3,6 +3,42 @@ import ResponseErrorHelper from 'App/Helpers/ResponseErrorHelper'
 import CreateAddressValidator from 'App/Validators/CreateAddressValidator'
 
 export default class AddressesController {
+  /**
+   * @swagger
+   *  /customers/{customerId}/addresses:
+   *    get:
+   *      tags:
+   *        - Addresses
+   *      summary: List all addresses
+   *      security:
+   *        type: http
+   *        scheme: bearer
+   *      parameters:
+   *        - in: path
+   *          name: customerId
+   *          schema:
+   *            type: integer
+   *          required: true
+   *          description: Customer ID
+   *      responses:
+   *        200:
+   *          description: List of addresses
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  data:
+   *                    type: array
+   *                    items:
+   *                      $ref: '#/components/schemas/Address'
+   *        401:
+   *          description: Unauthorized
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/ResponseErrorHelper'
+   */
   public async index({ request, response, auth }: HttpContextContract) {
     const { customerId, addressId } = request.params()
 
@@ -54,6 +90,54 @@ export default class AddressesController {
     )
   }
 
+  /**
+   * @swagger
+   *  /customers/{customerId}/addresses:
+   *    post:
+   *      tags:
+   *        - Addresses
+   *      summary: Create a new address
+   *      security:
+   *        type: http
+   *        scheme: bearer
+   *      parameters:
+   *        - in: path
+   *          name: customerId
+   *          schema:
+   *            type: integer
+   *          required: true
+   *          description: Customer ID
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/CreateAddressValidator'
+   *      responses:
+   *        200:
+   *          description: Address created
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  data:
+   *                    type: array
+   *                    items:
+   *                      $ref: '#/components/schemas/Address'
+   *        400:
+   *          description: Bad request
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/ResponseErrorHelper'
+   *        401:
+   *          description: Unauthorized
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/ResponseErrorHelper'
+   */
   public async store({ request, response, auth, logger }: HttpContextContract) {
     try {
       const payload = await request.validate(CreateAddressValidator)
@@ -102,6 +186,60 @@ export default class AddressesController {
     }
   }
 
+  /**
+   * @swagger
+   *  /customers/{customerId}/addresses/{addressId}:
+   *    put:
+   *      tags:
+   *        - Addresses
+   *      summary: Update an address
+   *      security:
+   *        type: http
+   *        scheme: bearer
+   *      parameters:
+   *        - in: path
+   *          name: customerId
+   *          schema:
+   *            type: integer
+   *          required: true
+   *          description: Customer ID
+   *        - in: path
+   *          name: addressId
+   *          schema:
+   *            type: integer
+   *          required: true
+   *          description: Address ID
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/CreateAddressValidator'
+   *      responses:
+   *        200:
+   *          description: Address updated
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  data:
+   *                    type: array
+   *                    items:
+   *                      $ref: '#/components/schemas/Address'
+   *        400:
+   *          description: Bad request
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/ResponseErrorHelper'
+   *        401:
+   *          description: Unauthorized
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/ResponseErrorHelper'
+   */
   public async update({ request, response, auth, logger }: HttpContextContract) {
     try {
       const payload = await request.validate(CreateAddressValidator)
@@ -147,6 +285,51 @@ export default class AddressesController {
     }
   }
 
+  /**
+   * @swagger
+   *  /customers/{customerId}/addresses/{addressId}:
+   *    delete:
+   *      tags:
+   *        - Addresses
+   *      summary: Delete an address
+   *      security:
+   *        type: http
+   *        scheme: bearer
+   *      parameters:
+   *        - in: path
+   *          name: customerId
+   *          schema:
+   *            type: integer
+   *          required: true
+   *          description: Customer ID
+   *        - in: path
+   *          name: addressId
+   *          schema:
+   *            type: integer
+   *          required: true
+   *          description: Address ID
+   *      responses:
+   *        204:
+   *          description: Address deleted
+   *        400:
+   *          description: Bad request
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/ResponseErrorHelper'
+   *        401:
+   *          description: Unauthorized
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/ResponseErrorHelper'
+   *        404:
+   *          description: Not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/ResponseErrorHelper'
+   */
   public async delete({ request, response, auth, logger }: HttpContextContract) {
     try {
       const { customerId, addressId } = request.params()

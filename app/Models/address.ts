@@ -2,6 +2,28 @@ import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Customer from './Customer'
 
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      Address:
+ *        type: object
+ *        properties:
+ *          id:
+ *            type: integer
+ *          street1:
+ *            type: string
+ *          street2:
+ *            type: string
+ *          city:
+ *            type: string
+ *          zip:
+ *            type: string
+ *          country:
+ *            type: string
+ *          id_default:
+ *            type: string
+ */
 export default class Address extends BaseModel {
   @column({ isPrimary: true })
   public id: number

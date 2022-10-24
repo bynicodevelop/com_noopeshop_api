@@ -1,5 +1,35 @@
 {
   "commands": {
+    "create:user": {
+      "settings": {
+        "loadApp": true
+      },
+      "commandPath": "./commands/CreateUser",
+      "commandName": "create:user",
+      "description": "",
+      "args": [],
+      "aliases": [],
+      "flags": [
+        {
+          "name": "email",
+          "propertyName": "email",
+          "type": "string",
+          "description": "Email to connect"
+        },
+        {
+          "name": "password",
+          "propertyName": "password",
+          "type": "string",
+          "description": "Password to connect"
+        },
+        {
+          "name": "role",
+          "propertyName": "role",
+          "type": "string",
+          "description": "Role"
+        }
+      ]
+    },
     "dump:rcfile": {
       "settings": {},
       "commandPath": "@adonisjs/core/build/commands/DumpRc",

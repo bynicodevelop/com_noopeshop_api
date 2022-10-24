@@ -1,7 +1,7 @@
 import { test } from '@japa/runner'
 import UserFactory from 'Database/factories/UserFactory'
 import Config from '@ioc:Adonis/Core/Config'
-import Role from 'App/Models/Role'
+import Role from 'App/Models/role'
 
 const getRoleAdmin = async () => {
   Config.set('roles.default', 'admin')

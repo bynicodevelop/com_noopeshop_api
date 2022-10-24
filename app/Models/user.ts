@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, BaseModel, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
-import Role from './Role'
+import Role from './role'
 import Config from '@ioc:Adonis/Core/Config'
 import Customer from './Customer'
 

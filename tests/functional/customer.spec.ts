@@ -1,5 +1,5 @@
 import { test } from '@japa/runner'
-import Role from 'App/Models/Role'
+import Role from 'App/Models/role'
 import User from 'App/Models/user'
 import CustomerFactory from 'Database/factories/CustomerFactory'
 import UserFactory from 'Database/factories/UserFactory'

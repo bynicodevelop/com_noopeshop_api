@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import Config from '@ioc:Adonis/Core/Config'
-import Role from 'App/Models/Role'
+import Role from 'App/Models/role'
 import User from 'App/Models/user'
 import CreateCustomerValidator from 'App/Validators/CreateCustomerValidator'
 import { DateTime } from 'luxon'
